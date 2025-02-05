@@ -29,7 +29,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          FILE_CONTENT=$(cat path/to/your/code/index.ts)
+          FILE_CONTENT=$(cat index.ts)
 
           curl -X POST "https://api.openai.com/v1/completions" \
             -H "Content-Type: application/json" \
