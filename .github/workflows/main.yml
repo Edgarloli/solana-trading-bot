@@ -1,27 +1,44 @@
-name: Run Solana Trading Bot
+name: Run Solana Trading Bot and Analyze Code
 
 on:
   push:
     branches:
-      - master  # O la rama en la que trabajes
+      - master
   pull_request:
     branches:
-      - master  # O la rama en la que trabajes
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'  # Usa la versión que necesites
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: |
+          npm install
 
-    - name: Run Solana Trading Bot
-      run: npm run start  # O el comando adecuado para ejecutar el bot
+      - name: Send code to OpenAI for analysis
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          FILE_CONTENT=$(cat path/to/your/code/index.ts)
+
+          curl -X POST "https://api.openai.com/v1/completions" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $OPENAI_API_KEY" \
+            -d '{
+              "model": "text-davinci-003",
+              "prompt": "Por favor analiza este código de un bot Solana y sugiere mejoras o posibles errores: \n" + "'"${FILE_CONTENT}"' \n\nSugerencias:",
+              "max_tokens": 200
+            }'
+
+      - name: Run Solana Trading Bot
+        run: npm run start
