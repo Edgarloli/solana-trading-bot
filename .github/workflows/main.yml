@@ -1,0 +1,27 @@
+name: Run Solana Trading Bot
+
+on:
+  push:
+    branches:
+      - master  # O la rama en la que trabajes
+  pull_request:
+    branches:
+      - master  # O la rama en la que trabajes
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'  # Usa la versión que necesites
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run Solana Trading Bot
+      run: npm run start  # O el comando adecuado para ejecutar el bot
